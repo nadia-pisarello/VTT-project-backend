@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UsuarioEntity } from './entidad/usuario.entity/usuario.entity';
+import { UsuarioEntity } from './entidad/usuario.entity';
 import { Repository } from 'typeorm';
 import { CrearUsuarioDto } from './dto/crear-usuario.dto';
 import * as bcrypt from 'bcrypt';

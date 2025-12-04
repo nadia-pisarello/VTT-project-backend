@@ -11,7 +11,7 @@ export class CrearPersonajeDto {
     nombre: string;
 
     @IsEnum(AlineamientoEnum) @IsNotEmpty()
-    alinamiento: AlineamientoEnum;
+    alineamiento: AlineamientoEnum;
 
     @IsArray()
     @ValidateNested({ each: true }) @IsNotEmpty()

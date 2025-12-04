@@ -1,16 +1,18 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Not, Repository } from 'typeorm';
 import { CrearPersonajeDto } from './dto/crear-personaje.dto';
-import { PersonajeEntity } from './entidad/personaje.entity/personaje.entity';
-import { UsuarioEntity } from 'src/usuario/entidad/usuario.entity/usuario.entity';
+import { PersonajeEntity } from './entidad/personaje.entity';
+import { UsuarioEntity } from 'src/usuario/entidad/usuario.entity';
 import { UpdatePersonajeDto } from './dto/update-personaje.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class PersonajeService {
     constructor(
-        @InjectRepository(PersonajeEntity) private readonly personajeRepo: Repository<PersonajeEntity>,
-        @InjectRepository(UsuarioEntity) private readonly usuarioRepo: Repository<UsuarioEntity>,
+        @InjectRepository(PersonajeEntity)
+        private readonly personajeRepo: Repository<PersonajeEntity>,
+        @InjectRepository(UsuarioEntity)
+        private readonly usuarioRepo: Repository<UsuarioEntity>,
     ) { }
 
     async getAllPersonajesUsuario(usuarioId: number): Promise<PersonajeEntity[]> {

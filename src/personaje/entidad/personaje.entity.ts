@@ -1,8 +1,8 @@
 import { AlineamientoEnum } from "src/personaje/enum/alineamiento.enum";
 import { ClaseEnum } from "src/personaje/enum/clase.enum";
 import { HabilidadEnum } from "src/personaje/enum/habilidad.enum";
-import { UsuarioEntity } from "src/usuario/entidad/usuario.entity/usuario.entity";
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { UsuarioEntity } from "src/usuario/entidad/usuario.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class PersonajeEntity {
@@ -13,7 +13,7 @@ export class PersonajeEntity {
     @Column({ length: 100 })
     nombre: string;
 
-    @Column({ type: 'enum', enum: AlineamientoEnum })
+    @Column({ type: 'simple-enum', enum: AlineamientoEnum })
     alineamiento: AlineamientoEnum;
 
     @Column({ type: 'json' })
@@ -22,7 +22,7 @@ export class PersonajeEntity {
         valor: number;
     }[];
 
-    @Column({ type: 'enum', enum: ClaseEnum })
+    @Column({ type: 'simple-enum', enum: ClaseEnum })
     clase: ClaseEnum;
 
     @Column({ length: 50 })
