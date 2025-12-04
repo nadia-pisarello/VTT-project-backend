@@ -31,9 +31,6 @@ export class PersonajeService {
 
     async createPersonaje(dto: CrearPersonajeDto, usuarioId: number) {
         const usuario = await this.validarUsuario(usuarioId);
-        if (!usuario) {
-            throw new NotFoundException(`Usuario no encontrado`);
-        }
         const nuevoPersonaje = this.personajeRepo.create({ ...dto, usuario });
         return this.personajeRepo.save(nuevoPersonaje);
     }

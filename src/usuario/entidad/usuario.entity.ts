@@ -1,4 +1,5 @@
 import { Exclude } from "class-transformer";
+import { PartidaEntity } from "src/partida/entidad/partida.entity";
 import { PersonajeEntity } from "src/personaje/entidad/personaje.entity";
 import { RolUsuarioEnum } from "src/usuario/enum/rol-usuario.enum";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
@@ -18,4 +19,6 @@ export class UsuarioEntity {
     rol: RolUsuarioEnum;
     @OneToMany(() => PersonajeEntity, personaje => personaje.usuario)
     personajes: PersonajeEntity[];
+    @OneToMany(() => PartidaEntity, partida => partida.narradorId)
+    partidas: PartidaEntity[];
 }

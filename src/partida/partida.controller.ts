@@ -1,41 +1,43 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
-import { PersonajeService } from './personaje.service';
-import { CrearPersonajeDto } from './dto/crear-personaje.dto';
-import { UpdatePersonajeDto } from './dto/update-personaje.dto';
+import { PartidaService } from './partida.service';
+import { CrearPartidaDto } from './dto/crear-partida.dto';
+import { UpdatePartidaDto } from './dto/update-partida.dto';
 
-@Controller('personaje')
-export class PersonajeController {
-    constructor(private readonly personajeServ: PersonajeService) { }
+@Controller('partida')
+export class PartidaController {
+    constructor(
+        private readonly partidaServ: PartidaService
+    ) { }
 
     @Post('usuario/:usuarioId')
     create(
         @Param('usuarioId', ParseIntPipe) usuarioId: number,
-        @Body() dto: CrearPersonajeDto
+        @Body() dto: CrearPartidaDto
     ) {
-        return this.personajeServ.createPersonaje(dto, usuarioId);
+        return this.partidaServ.createPartida(dto, usuarioId);
     }
 
     @Get('usuario/:usuarioId')
     findAll(
         @Param('usuarioId', ParseIntPipe) usuarioId: number
     ) {
-        return this.personajeServ.getAllPersonajesUsuario(usuarioId);
+        return this.partidaServ.getAllPartidas(usuarioId);
     }
 
     @Get(':id')
     findOne(
         @Param('id', ParseIntPipe) id: number
     ) {
-        return this.personajeServ.getPersonajeById(id);
+        return this.partidaServ.getPartidaById(id);
     }
 
     @Patch(':id/usuario/:usuarioId')
     update(
         @Param('id', ParseIntPipe) id: number,
         @Param('usuarioId', ParseIntPipe) usuarioId: number,
-        @Body() dto: UpdatePersonajeDto
+        @Body() dto: UpdatePartidaDto
     ) {
-        return this.personajeServ.updatePersonaje(id, dto, usuarioId);
+        return this.partidaServ.updatePartida(id, dto, usuarioId);
     }
 
     @Delete(':id/usuario/:usuarioId')
@@ -43,6 +45,6 @@ export class PersonajeController {
         @Param('id', ParseIntPipe) id: number,
         @Param('usuarioId', ParseIntPipe) usuarioId: number
     ) {
-        return this.personajeServ.deletePersonaje(id, usuarioId);
+        return this.partidaServ.deletePartida(id, usuarioId);
     }
 }
