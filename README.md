@@ -28,6 +28,7 @@ La documentación formal, endpoints estables y autenticación se añadirán conf
 ## Estructura Actual del Proyecto
 
 src/
+├── partida/
 ├── usuario/
 ├── personaje/
 ├── app.module.ts
