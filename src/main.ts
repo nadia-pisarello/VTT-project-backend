@@ -14,12 +14,12 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   const config = new DocumentBuilder()
     .setTitle('API Documentation')
-    .setDescription('The API description')
+    .setDescription('Documentación de la API para Usuarios, Personajes y Partidas.')
     .setVersion('1.0')
-    .addTag('api', 'API related endpoints')
+    // .addTag('api', 'API related endpoints')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api-docs', app, document);
   await app.listen(3000);
 }
 bootstrap();

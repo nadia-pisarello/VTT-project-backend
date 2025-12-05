@@ -2,7 +2,9 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from 
 import { PartidaService } from './partida.service';
 import { CrearPartidaDto } from './dto/crear-partida.dto';
 import { UpdatePartidaDto } from './dto/update-partida.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Partida')
 @Controller('partida')
 export class PartidaController {
     constructor(
