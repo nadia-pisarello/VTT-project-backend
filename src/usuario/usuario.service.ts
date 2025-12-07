@@ -35,6 +35,9 @@ export class UsuarioService {
         }
         return usuario;
     }
+    async findByEmail(email: string) {
+        return this.usuarioRepository.findOne({ where: { email: email.toLowerCase() } });
+    }
     async update(id: number, dto: UpdateUsuarioDto) {
         const usuario = await this.usuarioRepository.findOne({ where: { id } });
         if (dto.password) {
