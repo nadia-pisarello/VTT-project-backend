@@ -5,11 +5,12 @@ import { PersonajeModule } from './personaje/personaje.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PartidaModule } from './partida/partida.module';
 import { AuthModule } from './auth/auth.module';
-import { OutService } from './out/out.service';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: ['.env.development', '.env'],
+    }),
     UsuarioModule,
     PersonajeModule,
     TypeOrmModule.forRoot({
@@ -21,6 +22,5 @@ import { OutService } from './out/out.service';
     PartidaModule,
     AuthModule,
   ],
-  providers: [OutService],
 })
 export class AppModule { }

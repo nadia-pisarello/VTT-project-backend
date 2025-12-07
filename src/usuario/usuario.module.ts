@@ -8,6 +8,7 @@ import { PersonajeEntity } from 'src/personaje/entidad/personaje.entity';
 @Module({
     imports: [TypeOrmModule.forFeature([UsuarioEntity, PersonajeEntity])],
     controllers: [UsuarioController],
-    providers: [UsuarioService]
+    providers: [UsuarioService],
+    exports: [UsuarioService],
 })
 export class UsuarioModule { }
