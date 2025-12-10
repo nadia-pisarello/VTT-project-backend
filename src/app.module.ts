@@ -9,7 +9,8 @@ import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env.development', '.env'],
+      isGlobal: true,
+      envFilePath: process.env.SECRET ? `.development.env.${process.env.SECRET}` : '.development.env',
     }),
     UsuarioModule,
     PersonajeModule,

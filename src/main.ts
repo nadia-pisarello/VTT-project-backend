@@ -7,8 +7,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
-    forbidNonWhitelisted: true,
     transform: true,
+    forbidNonWhitelisted: true,
     transformOptions: { enableImplicitConversion: true },
   }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
@@ -16,7 +16,6 @@ async function bootstrap() {
     .setTitle('API Documentation')
     .setDescription('Documentación de la API para Usuarios, Personajes y Partidas.')
     .setVersion('1.0')
-    // .addTag('api', 'API related endpoints')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);

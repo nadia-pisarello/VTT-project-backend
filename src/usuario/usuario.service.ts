@@ -18,7 +18,8 @@ export class UsuarioService {
         if (existe) {
             throw new BadRequestException('El email ya está registrado');
         }
-        const hashedPassword = await bcrypt.hash(dto.password, 10);
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(dto.password, salt);
         const nuevoUsuario = this.usuarioRepository.create({
             ...dto,
             password: hashedPassword,
