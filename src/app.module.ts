@@ -1,25 +1,26 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsuarioModule } from './usuario/usuario.module';
 import { PersonajeModule } from './personaje/personaje.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { PartidaModule } from './partida/partida.module';
 import { AuthModule } from './auth/auth.module';
+import databaseConfig from './config/database.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: process.env.SECRET ? `.development.env.${process.env.SECRET}` : '.development.env',
+      load: [databaseConfig],
+      envFilePath: `.env.${process.env.APP_ENV || 'dev'}`,
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) =>
+        configService.get<TypeOrmModuleOptions>('database'),
     }),
     UsuarioModule,
     PersonajeModule,
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: ':memory:',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
-    }),
     PartidaModule,
     AuthModule,
   ],

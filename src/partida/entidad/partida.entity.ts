@@ -1,5 +1,5 @@
 import { UsuarioEntity } from "src/usuario/entidad/usuario.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class PartidaEntity {
@@ -16,4 +16,17 @@ export class PartidaEntity {
     @JoinColumn({ name: 'narradorId' })
     narradorId: UsuarioEntity;
 
+    @ManyToMany(() => UsuarioEntity)
+    @JoinTable({
+        name: 'partida_jugadores',
+        joinColumn: { name: 'partidaId', referencedColumnName: 'id' },
+        inverseJoinColumn: { name: 'usuarioId', referencedColumnName: 'id' },
+    })
+    jugadores: UsuarioEntity[];
+
+    @Column({ unique: true })
+    linkAcceso: string;
+
+    @Column({ type: 'json', nullable: true })
+    solicitudesPendientes: { usuarioId: number; nombreUsuario: string }[];
 } 

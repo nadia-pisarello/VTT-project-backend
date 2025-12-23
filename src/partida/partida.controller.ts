@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { PartidaService } from './partida.service';
 import { CrearPartidaDto } from './dto/crear-partida.dto';
 import { UpdatePartidaDto } from './dto/update-partida.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Partida')
 @Controller('partida')
@@ -17,6 +18,15 @@ export class PartidaController {
         @Body() dto: CrearPartidaDto
     ) {
         return this.partidaServ.createPartida(dto, usuarioId);
+    }
+
+    @Post('solicitar-unirse')
+    @UseGuards(AuthGuard('jwt'))
+    solicitarUnirse(
+        @Req() req,
+        @Body('linkAcceso') linkAcceso: string
+    ) {
+        return this.partidaServ.solicitarUnirse(linkAcceso, req);
     }
 
     @Get('usuario/:usuarioId')

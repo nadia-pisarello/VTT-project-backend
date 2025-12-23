@@ -4,6 +4,7 @@ import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
+  console.log('process.env.SECRET:', process.env.SECRET);
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
@@ -16,6 +17,7 @@ async function bootstrap() {
     .setTitle('API Documentation')
     .setDescription('Documentación de la API para Usuarios, Personajes y Partidas.')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);

@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PartidaEntity } from './entidad/partida.entity';
 import { Repository } from 'typeorm';
 import { UsuarioEntity } from 'src/usuario/entidad/usuario.entity';
 import { UpdatePartidaDto } from './dto/update-partida.dto';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class PartidaService {
@@ -16,7 +17,13 @@ export class PartidaService {
 
     async createPartida(dto: Partial<PartidaEntity>, usuarioId: number): Promise<PartidaEntity> {
         const usuario = await this.validarUsuario(usuarioId);
-        const nuevaPartida = this.partidaRepo.create({ ...dto, narradorId: usuario });
+        const nuevaPartida = this.partidaRepo.create({
+            ...dto,
+            narradorId: usuario,
+            linkAcceso: randomUUID(),
+            jugadores: [],
+            solicitudesPendientes: []
+        });
         return this.partidaRepo.save(nuevaPartida);
     }
 
@@ -47,6 +54,23 @@ export class PartidaService {
         const partida = await this.validarPartida(id, usuarioId);
         return this.partidaRepo.remove(partida);
     }
+
+    async solicitarUnirse(linkAcceso: string, usuarioId: number) {
+        const usuario = await this.validarUsuario(usuarioId);
+        const partida = await this.partidaRepo.findOne({ where: { linkAcceso }, relations: ['jugadores'] });
+        if (!partida) {
+            throw new NotFoundException(`Partida no encontrada`);
+        }
+        if (partida.jugadores.some(jugador => jugador.id === usuario.id)) {
+            throw new BadRequestException(`El usuario ya es jugador de la partida`);
+        }
+        if (partida.solicitudesPendientes.some(solicitud => solicitud.usuarioId === usuario.id)) {
+            throw new BadRequestException(`El usuario ya tiene una solicitud pendiente para unirse a la partida`);
+        }
+        partida.solicitudesPendientes.push({ usuarioId: usuario.id, nombreUsuario: usuario.nombre });
+        return this.partidaRepo.save(partida);
+    }
+
 
     private async validarUsuario(usuarioId: number): Promise<UsuarioEntity> {
         const usuario = await this.usuarioRepo.findOne({ where: { id: usuarioId } });

@@ -16,20 +16,21 @@ La documentación formal, endpoints estables y autenticación se añadirán conf
 
 ## Tecnologías Utilizadas
 
-- **NestJS** (arquitectura modular)
+- **NestJS**
 - **TypeScript**
 - **TypeORM**
-- **MySQL** como base de datos principal
+- **MySQL**
 - **Class Validator / Class Transformer**
-- **Swagger** (por habilitar)
+- **Swagger**
 
 ---
 
 ## Estructura Actual del Proyecto
 
 src/
+├── auth/
 ├── partida/
-├── usuario/
 ├── personaje/
+├── usuario/
 ├── app.module.ts
 └── main.ts
