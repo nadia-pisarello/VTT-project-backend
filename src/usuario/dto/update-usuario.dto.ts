@@ -1,5 +1,4 @@
 import { IsEmail, IsEnum, IsOptional, IsString } from "class-validator";
-import { RolUsuarioEnum } from "../enum/rol-usuario.enum";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class UpdateUsuarioDto {
@@ -26,11 +25,4 @@ export class UpdateUsuarioDto {
     @IsOptional() @IsString()
     password?: string;
 
-    @ApiProperty({
-        description: 'nuevo rol de usuario',
-        example: RolUsuarioEnum.PLAYER,
-        required: false
-    })
-    @IsOptional() @IsEnum(RolUsuarioEnum)
-    rol?: RolUsuarioEnum;
 }

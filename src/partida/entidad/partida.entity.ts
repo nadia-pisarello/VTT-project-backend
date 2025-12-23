@@ -1,7 +1,7 @@
 import { UsuarioEntity } from "src/usuario/entidad/usuario.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+@Entity('partida')
 export class PartidaEntity {
     @PrimaryGeneratedColumn()
     id: number;
