@@ -22,7 +22,8 @@ export class PartidaService {
             narradorId: usuario,
             linkAcceso: randomUUID(),
             jugadores: [],
-            solicitudesPendientes: []
+            solicitudesPendientes: [],
+            rutasMapas: []
         });
         return this.partidaRepo.save(nuevaPartida);
     }
@@ -35,7 +36,7 @@ export class PartidaService {
     }
 
     async getPartidaById(id: number): Promise<PartidaEntity> {
-        const partida = await this.partidaRepo.findOne({ where: { id }, relations: ['narradorId'] });
+        const partida = await this.partidaRepo.findOne({ where: { id }, relations: ['narradorId', 'jugadores'] });
         if (!partida) {
             throw new NotFoundException(`Partida no encontrada`);
         }
@@ -71,6 +72,33 @@ export class PartidaService {
         return this.partidaRepo.save(partida);
     }
 
+    async aceptarSolicitud(partidaId: number, solicitanteId: number, dmId: number) {
+        const partida = await this.validarPartida(partidaId, dmId);
+        if (partida.narradorId.id !== dmId) {
+            throw new BadRequestException(`Solo el narrador puede aceptar solicitudes`);
+        }
+        const index = partida.solicitudesPendientes.findIndex(solicitud => solicitud.usuarioId === solicitanteId);
+        if (index === -1) {
+            throw new NotFoundException(`Solicitud no encontrada`);
+        }
+        const usuario = await this.validarUsuario(solicitanteId);
+        partida.solicitudesPendientes.splice(index, 1);
+        partida.jugadores.push(usuario);
+        return this.partidaRepo.save(partida);
+    }
+
+    async rechazarSolicitud(partidaId: number, solicitanteId: number, dmId: number) {
+        const partida = await this.validarPartida(partidaId, dmId);
+        if (partida.narradorId.id !== dmId) {
+            throw new BadRequestException(`Solo el narrador puede rechazar solicitudes`);
+        }
+        const index = partida.solicitudesPendientes.findIndex(solicitud => solicitud.usuarioId === solicitanteId);
+        if (index === -1) {
+            throw new NotFoundException(`Solicitud no encontrada`);
+        }
+        partida.solicitudesPendientes.splice(index, 1);
+        return this.partidaRepo.save(partida);
+    }
 
     private async validarUsuario(usuarioId: number): Promise<UsuarioEntity> {
         const usuario = await this.usuarioRepo.findOne({ where: { id: usuarioId } });

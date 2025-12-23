@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class CrearPartidaDto {
     @ApiProperty({
@@ -8,12 +8,4 @@ export class CrearPartidaDto {
     })
     @IsString() @IsNotEmpty()
     nombre: string;
-
-    @ApiProperty({
-        description: 'Rutas de los mapas asociados a la partida',
-        example: ['mapa1.png', 'mapa2.png   ']
-    })
-    @IsArray()
-    @IsString({ each: true })
-    rutasMapas: string[];
 }
