@@ -1,5 +1,5 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { Not, Repository } from 'typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Repository } from 'typeorm';
 import { CrearPersonajeDto } from './dto/crear-personaje.dto';
 import { PersonajeEntity } from './entidad/personaje.entity';
 import { UsuarioEntity } from 'src/usuario/entidad/usuario.entity';

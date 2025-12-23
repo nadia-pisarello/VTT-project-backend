@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, Min, MinLength } from "class-validator";
+import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
 import { ApiProperty, ApiTags } from "@nestjs/swagger";
 
 @ApiTags('Crear Usuario')

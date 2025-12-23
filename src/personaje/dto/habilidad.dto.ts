@@ -1,4 +1,4 @@
-import { IsEnum, IsInt, IsString, Min } from "class-validator";
+import { IsEnum, IsInt, Min } from "class-validator";
 import { HabilidadEnum } from "../enum/habilidad.enum";
 import { ApiProperty } from "@nestjs/swagger";
 
