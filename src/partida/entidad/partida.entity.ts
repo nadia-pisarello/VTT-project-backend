@@ -27,6 +27,6 @@ export class PartidaEntity {
     @Column({ unique: true })
     linkAcceso: string;
 
-    @Column({ type: 'json', nullable: true })
+    @Column({ type: 'json', default: [] })
     solicitudesPendientes: { usuarioId: number; nombreUsuario: string }[];
 } 

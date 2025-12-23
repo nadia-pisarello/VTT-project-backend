@@ -29,6 +29,26 @@ export class PartidaController {
         return this.partidaServ.solicitarUnirse(linkAcceso, req);
     }
 
+    @Post(':partidaId/solicitudes/:usuarioId/aceptar')
+    aceptarSolicitud(
+        @Param('partidaId', ParseIntPipe) partidaId: number,
+        @Param('usuarioId', ParseIntPipe) usuarioId: number,
+        @Req() req
+    ) {
+        const dmId = req.user.id;
+        return this.partidaServ.aceptarSolicitud(partidaId, usuarioId, dmId);
+    }
+
+    @Post(':partidaId/solicitudes/:usuarioId/rechazar')
+    rechazarSolicitud(
+        @Param('partidaId', ParseIntPipe) partidaId: number,
+        @Param('usuarioId', ParseIntPipe) usuarioId: number,
+        @Req() req
+    ) {
+        const dmId = req.user.id;
+        return this.partidaServ.rechazarSolicitud(partidaId, usuarioId, dmId);
+    }
+
     @Get('usuario/:usuarioId')
     findAll(
         @Param('usuarioId', ParseIntPipe) usuarioId: number
