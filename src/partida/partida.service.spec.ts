@@ -3,9 +3,7 @@ import { PartidaService } from './partida.service';
 import { Repository } from 'typeorm';
 import { PartidaEntity } from './entidad/partida.entity';
 import { UsuarioEntity } from 'src/usuario/entidad/usuario.entity';
-import { get } from 'http';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { create } from 'domain';
 
 describe('PartidaService', () => {
   let service: PartidaService;
