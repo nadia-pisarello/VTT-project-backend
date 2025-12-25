@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 describe('AuthService', () => {
   let service: AuthService;
   let usuarioServ: jest.Mocked<UsuarioService>;
+  let jwtService: jest.Mocked<JwtService>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -28,6 +29,7 @@ describe('AuthService', () => {
 
     service = module.get<AuthService>(AuthService);
     usuarioServ = module.get(UsuarioService);
+    jwtService = module.get(JwtService);
   });
 
   it('should return user without password if credentials are valid', async () => {
@@ -71,4 +73,19 @@ describe('AuthService', () => {
     );
     expect(result).toBeNull();
   });
+
+  it('should return an access token on login', async () => {
+    const usuarioMock = {
+      id: 1,
+      email: 'test@email.com',
+    };
+    const tokenMock = 'jwtToken';
+    jwtService.sign.mockReturnValue(tokenMock);
+    const result = await service.login(usuarioMock as any);
+    expect(jwtService.sign).toHaveBeenCalledWith({
+      sub: usuarioMock.id,
+      email: usuarioMock.email,
+    });
+    expect(result).toEqual({ access_token: tokenMock });
+  })
 });
