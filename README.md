@@ -22,6 +22,25 @@ La documentación formal, endpoints estables y autenticación se añadirán conf
 - **MySQL**
 - **Class Validator / Class Transformer**
 - **Swagger**
+- **Jest**
+
+---
+
+## Testing
+
+El proyecto utiliza **Jest** para la implementación de **tests unitarios**, principalmente sobre la capa de servicios.
+
+Los tests verifican:
+
+- reglas de negocio
+- validaciones
+- manejo de errores
+
+### Ejecutar tests
+
+```bash
+npm run test
+```
 
 ---
 
@@ -29,6 +48,7 @@ La documentación formal, endpoints estables y autenticación se añadirán conf
 
 src/
 ├── auth/
+├── config/
 ├── partida/
 ├── personaje/
 ├── usuario/
