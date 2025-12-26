@@ -14,7 +14,7 @@ export class UsuarioService {
     ) { }
 
     async create(dto: CrearUsuarioDto) {
-        const existe = await this.usuarioRepository.findOne({ where: { email: dto.email.toLowerCase() } });
+        const existe = await this.findByEmail(dto.email);
         if (existe) {
             throw new BadRequestException('El email ya está registrado');
         }
@@ -40,7 +40,13 @@ export class UsuarioService {
         return this.usuarioRepository.findOne({ where: { email: email.toLowerCase() } });
     }
     async update(id: number, dto: UpdateUsuarioDto) {
-        const usuario = await this.usuarioRepository.findOne({ where: { id } });
+        const usuario = await this.findOne(id);
+        if (dto.email) {
+            const existe = await this.findByEmail(dto.email);
+            if (existe && existe.id !== id) {
+                throw new BadRequestException('El email ya está registrado');
+            }
+        }
         if (dto.password) {
             dto.password = await bcrypt.hash(dto.password, 10);
         }
@@ -49,9 +55,6 @@ export class UsuarioService {
     }
     async remove(id: number) {
         const usuario = await this.findOne(id);
-        if (!usuario) {
-            throw new NotFoundException('Usuario no encontrado');
-        }
         return this.usuarioRepository.remove(usuario);
     }
 }
