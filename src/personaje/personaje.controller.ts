@@ -1,45 +1,56 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { PersonajeService } from './personaje.service';
 import { CrearPersonajeDto } from './dto/crear-personaje.dto';
 import { UpdatePersonajeDto } from './dto/update-personaje.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('Personaje')
 @Controller('personaje')
 export class PersonajeController {
     constructor(private readonly personajeServ: PersonajeService) { }
 
-    @Post('partida/:partidaId/usuario/:usuarioId')
+    @UseGuards(JwtAuthGuard)
+    @Post('partida/:partidaId')
     create(
-        @Param('usuarioId', ParseIntPipe) usuarioId: number,
         @Param('partidaId', ParseIntPipe) partidaId: number,
+        @Req() req,
         @Body() dto: CrearPersonajeDto
     ) {
+        const usuarioId = req.user.id;
         return this.personajeServ.createPersonaje(dto, usuarioId, partidaId);
     }
 
-    @Get('partida/:partidaId/usuario/:usuarioId/mis-personajes')
+    @UseGuards(JwtAuthGuard)
+    @Get('partida/:partidaId/mis-personajes')
     findByPartida(
         @Param('partidaId', ParseIntPipe) partidaId: number,
-        @Param('usuarioId', ParseIntPipe) usuarioId: number
+        @Req() req
     ) {
+        const usuarioId = req.user.id;
         return this.personajeServ.getPersonajesDePartida(partidaId, usuarioId);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Patch(':personajeId/usuario/:usuarioId')
     update(
         @Param('personajeId', ParseIntPipe) personajeId: number,
-        @Param('usuarioId', ParseIntPipe) usuarioId: number,
+        @Req() req,
         @Body() dto: UpdatePersonajeDto
     ) {
+        const usuarioId = req.user.id;
         return this.personajeServ.updatePersonaje(personajeId, dto, usuarioId);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete(':personajeId/usuario/:usuarioId')
     remove(
         @Param('personajeId', ParseIntPipe) personajeId: number,
-        @Param('usuarioId', ParseIntPipe) usuarioId: number
+        @Req() req
     ) {
+        const usuarioId = req.user.id;
         return this.personajeServ.deletePersonaje(personajeId, usuarioId);
     }
 }
+
+

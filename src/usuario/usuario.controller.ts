@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { CrearUsuarioDto } from './dto/crear-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('Usuario')
 @Controller('usuario')
@@ -13,24 +14,40 @@ export class UsuarioController {
     create(@Body() dto: CrearUsuarioDto) {
         return this.usuarioService.create(dto);
     }
+
     @Get()
     findAll() {
         return this.usuarioService.findAll();
     }
-    @Get(':id')
-    findOne(@Param('id', ParseIntPipe) id: number) {
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/mi-perfil')
+    findOne(@Req() req) {
+        const id = req.user.id;
         return this.usuarioService.findOne(id);
     }
+
     @Get('email/:email')
     findByEmail(@Param('email') email: string) {
         return this.usuarioService.findByEmail(email);
     }
-    @Patch(':id')
-    update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateUsuarioDto) {
+
+    @UseGuards(JwtAuthGuard)
+    @Patch('editar-perfil')
+    update(
+        @Req() req,
+        @Body() dto: UpdateUsuarioDto
+    ) {
+        const id = req.user.id;
         return this.usuarioService.update(id, dto);
     }
-    @Delete(':id')
-    remove(@Param('id', ParseIntPipe) id: number) {
+
+    @UseGuards(JwtAuthGuard)
+    @Delete('eliminar-cuenta')
+    remove(
+        @Req() req
+    ) {
+        const id = req.user.id;
         return this.usuarioService.remove(id);
     }
 }
