@@ -4,6 +4,7 @@ import { CrearPartidaDto } from './dto/crear-partida.dto';
 import { UpdatePartidaDto } from './dto/update-partida.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('Partida')
 @Controller('partida')
@@ -12,24 +13,27 @@ export class PartidaController {
         private readonly partidaServ: PartidaService
     ) { }
 
-    @Post('usuario/:usuarioId')
+    @UseGuards(JwtAuthGuard)
+    @Post('nueva-partida')
     create(
-        @Param('usuarioId', ParseIntPipe) usuarioId: number,
+        @Req() req,
         @Body() dto: CrearPartidaDto
     ) {
+        const usuarioId = req.user.id;
         return this.partidaServ.createPartida(dto, usuarioId);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post('solicitar-unirse')
-    @UseGuards(AuthGuard('jwt'))
     solicitarUnirse(
         @Req() req,
         @Body('linkAcceso') linkAcceso: string
     ) {
-        return this.partidaServ.solicitarUnirse(linkAcceso, req);
+        const usuarioId = req.user.id;
+        return this.partidaServ.solicitarUnirse(linkAcceso, usuarioId);
     }
 
-    @Post(':partidaId/solicitudes/:usuarioId/aceptar')
+    @Post(':partidaId/solicitud/:usuarioId/aceptar')
     aceptarSolicitud(
         @Param('partidaId', ParseIntPipe) partidaId: number,
         @Param('usuarioId', ParseIntPipe) usuarioId: number,
@@ -49,34 +53,40 @@ export class PartidaController {
         return this.partidaServ.rechazarSolicitud(partidaId, usuarioId, dmId);
     }
 
-    @Get('usuario/:usuarioId')
-    findAll(
-        @Param('usuarioId', ParseIntPipe) usuarioId: number
-    ) {
+    @Get()
+    findAll(@Req() req) {
+        const usuarioId = req.user.id;
         return this.partidaServ.getAllPartidas(usuarioId);
     }
 
-    @Get(':id')
+    @UseGuards(JwtAuthGuard)
+    @Get(':partidaId')
     findOne(
-        @Param('id', ParseIntPipe) id: number
+        @Req() req,
+        @Param('partidaId', ParseIntPipe) partidaId: number
     ) {
-        return this.partidaServ.getPartidaById(id);
+        const usuarioId = req.user.id;
+        return this.partidaServ.obtjenerPartida(partidaId, usuarioId);
     }
 
-    @Patch(':id/usuario/:usuarioId')
+    @UseGuards(JwtAuthGuard)
+    @Patch(':partidaId/actualizar-partida')
     update(
-        @Param('id', ParseIntPipe) id: number,
-        @Param('usuarioId', ParseIntPipe) usuarioId: number,
+        @Param('partidaId', ParseIntPipe) partidaId: number,
+        @Req() req,
         @Body() dto: UpdatePartidaDto
     ) {
-        return this.partidaServ.updatePartida(id, dto, usuarioId);
+        const usuarioId = req.user.id
+        return this.partidaServ.updatePartida(partidaId, dto, usuarioId);
     }
 
-    @Delete(':id/usuario/:usuarioId')
+    @UseGuards(JwtAuthGuard)
+    @Delete('partidaId/eliminar-partida')
     remove(
         @Param('id', ParseIntPipe) id: number,
-        @Param('usuarioId', ParseIntPipe) usuarioId: number
+        @Req() req
     ) {
+        const usuarioId = req.user.id
         return this.partidaServ.deletePartida(id, usuarioId);
     }
 }
