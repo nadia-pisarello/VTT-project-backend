@@ -1,3 +1,4 @@
+import { PartidaEntity } from "src/partida/entidad/partida.entity";
 import { AlineamientoEnum } from "src/personaje/enum/alineamiento.enum";
 import { ClaseEnum } from "src/personaje/enum/clase.enum";
 import { HabilidadEnum } from "src/personaje/enum/habilidad.enum";
@@ -49,4 +50,8 @@ export class PersonajeEntity {
     @ManyToOne(() => UsuarioEntity, usuario => usuario.personajes, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'usuarioId' })
     usuario: UsuarioEntity;
+
+    @ManyToOne(() => PartidaEntity, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'partidaId' })
+    partida: PartidaEntity;
 }

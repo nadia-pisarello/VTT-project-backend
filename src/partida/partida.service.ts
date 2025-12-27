@@ -1,10 +1,11 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PartidaEntity } from './entidad/partida.entity';
 import { Repository } from 'typeorm';
 import { UsuarioEntity } from 'src/usuario/entidad/usuario.entity';
 import { UpdatePartidaDto } from './dto/update-partida.dto';
 import { randomUUID } from 'crypto';
+import { PersonajeEntity } from 'src/personaje/entidad/personaje.entity';
 
 @Injectable()
 export class PartidaService {
@@ -12,7 +13,9 @@ export class PartidaService {
         @InjectRepository(PartidaEntity)
         private readonly partidaRepo: Repository<PartidaEntity>,
         @InjectRepository(UsuarioEntity)
-        private readonly usuarioRepo: Repository<UsuarioEntity>
+        private readonly usuarioRepo: Repository<UsuarioEntity>,
+        @InjectRepository(PersonajeEntity)
+        private readonly personajeRepo: Repository<PersonajeEntity>,
     ) { }
 
     async createPartida(dto: Partial<PartidaEntity>, usuarioId: number): Promise<PartidaEntity> {
@@ -41,6 +44,37 @@ export class PartidaService {
             throw new NotFoundException(`Partida no encontrada`);
         }
         return partida;
+    }
+
+    async obtjenerPartida(partidaId: number, usuarioId: number) {
+        const partida = await this.partidaRepo.findOne({
+            where: {
+                id: partidaId,
+            },
+            relations: ['jugadores', 'narradorId']
+        });
+        if (!partida) {
+            throw new NotFoundException(`Partida no encontrada`);
+        }
+        const autorized = partida.narradorId.id === usuarioId ||
+            partida.jugadores.some(jugador => jugador.id === usuarioId);
+        if (!autorized) {
+            throw new BadRequestException(`El usuario no tiene acceso a la partida`);
+        }
+        return partida;
+    }
+
+    async obtenerPersonajesDePartida(partidaId: number, usuarioId: number) {
+        const partida = await this.obtjenerPartida(partidaId, usuarioId);
+        if (partida.narradorId.id !== usuarioId) {
+            throw new ForbiddenException(`Solo el narrador puede ver los personajes de la partida`);
+        }
+        return this.personajeRepo.find({
+            where: {
+                partida: { id: partidaId },
+            },
+            relations: ['usuario']
+        });
     }
 
     async updatePartida(id: number, dto: UpdatePartidaDto, usuarioId: number): Promise<PartidaEntity> {

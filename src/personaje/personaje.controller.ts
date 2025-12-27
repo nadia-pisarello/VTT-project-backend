@@ -9,42 +9,37 @@ import { ApiTags } from '@nestjs/swagger';
 export class PersonajeController {
     constructor(private readonly personajeServ: PersonajeService) { }
 
-    @Post('usuario/:usuarioId')
+    @Post('partida/:partidaId/usuario/:usuarioId')
     create(
         @Param('usuarioId', ParseIntPipe) usuarioId: number,
+        @Param('partidaId', ParseIntPipe) partidaId: number,
         @Body() dto: CrearPersonajeDto
     ) {
-        return this.personajeServ.createPersonaje(dto, usuarioId);
+        return this.personajeServ.createPersonaje(dto, usuarioId, partidaId);
     }
 
-    @Get('usuario/:usuarioId')
-    findAll(
+    @Get('partida/:partidaId/usuario/:usuarioId/mis-personajes')
+    findByPartida(
+        @Param('partidaId', ParseIntPipe) partidaId: number,
         @Param('usuarioId', ParseIntPipe) usuarioId: number
     ) {
-        return this.personajeServ.getAllPersonajesUsuario(usuarioId);
+        return this.personajeServ.getPersonajesDePartida(partidaId, usuarioId);
     }
 
-    @Get(':id')
-    findOne(
-        @Param('id', ParseIntPipe) id: number
-    ) {
-        return this.personajeServ.getPersonajeById(id);
-    }
-
-    @Patch(':id/usuario/:usuarioId')
+    @Patch(':personajeId/usuario/:usuarioId')
     update(
-        @Param('id', ParseIntPipe) id: number,
+        @Param('personajeId', ParseIntPipe) personajeId: number,
         @Param('usuarioId', ParseIntPipe) usuarioId: number,
         @Body() dto: UpdatePersonajeDto
     ) {
-        return this.personajeServ.updatePersonaje(id, dto, usuarioId);
+        return this.personajeServ.updatePersonaje(personajeId, dto, usuarioId);
     }
 
-    @Delete(':id/usuario/:usuarioId')
+    @Delete(':personajeId/usuario/:usuarioId')
     remove(
-        @Param('id', ParseIntPipe) id: number,
+        @Param('personajeId', ParseIntPipe) personajeId: number,
         @Param('usuarioId', ParseIntPipe) usuarioId: number
     ) {
-        return this.personajeServ.deletePersonaje(id, usuarioId);
+        return this.personajeServ.deletePersonaje(personajeId, usuarioId);
     }
 }

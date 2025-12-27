@@ -1,5 +1,6 @@
+import { PersonajeEntity } from "src/personaje/entidad/personaje.entity";
 import { UsuarioEntity } from "src/usuario/entidad/usuario.entity";
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('partida')
 export class PartidaEntity {
@@ -29,4 +30,7 @@ export class PartidaEntity {
 
     @Column({ type: 'json', default: [] })
     solicitudesPendientes: { usuarioId: number; nombreUsuario: string }[];
+
+    @OneToMany(() => PersonajeEntity, personaje => personaje.partida)
+    personajes: PersonajeEntity[];
 } 

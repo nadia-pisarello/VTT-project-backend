@@ -46,6 +46,7 @@ npm run test
 
 ## Estructura Actual del Proyecto
 
+```
 src/
 ├── auth/
 ├── config/
@@ -54,3 +55,4 @@ src/
 ├── usuario/
 ├── app.module.ts
 └── main.ts
+```
