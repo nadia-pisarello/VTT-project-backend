@@ -32,7 +32,7 @@ export class PersonajeController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Patch(':personajeId/usuario/:usuarioId')
+    @Patch(':personajeId/modificar-personaje')
     update(
         @Param('personajeId', ParseIntPipe) personajeId: number,
         @Req() req,
@@ -43,7 +43,7 @@ export class PersonajeController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Delete(':personajeId/usuario/:usuarioId')
+    @Delete(':personajeId/eliminar-personaje')
     remove(
         @Param('personajeId', ParseIntPipe) personajeId: number,
         @Req() req

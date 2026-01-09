@@ -28,7 +28,7 @@ export class PartidaEntity {
     @Column({ unique: true })
     linkAcceso: string;
 
-    @Column({ type: 'json', default: [] })
+    @Column({ type: 'json', nullable: true })
     solicitudesPendientes: { usuarioId: number; nombreUsuario: string }[];
 
     @OneToMany(() => PersonajeEntity, personaje => personaje.partida)
