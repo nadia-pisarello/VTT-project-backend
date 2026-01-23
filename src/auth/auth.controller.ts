@@ -17,8 +17,8 @@ export class AuthController {
         return this.authService.registro(dto);
     }
 
-    @UseGuards(LocalAuthGuard)
     @ApiBody({ type: LoginDto })
+    @UseGuards(LocalAuthGuard)
     @Post('login')
     login(@Request() req) {
         return this.authService.login(req.user);
