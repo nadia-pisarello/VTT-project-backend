@@ -31,11 +31,16 @@ export class PartidaService {
         return this.partidaRepo.save(nuevaPartida);
     }
 
-    async getAllPartidas(usuarioId: number): Promise<PartidaEntity[]> {
+    async getAllPartidas(usuarioId: number) {
         await this.validarUsuario(usuarioId);
-        return this.partidaRepo.find({
+        const dm = await this.partidaRepo.find({
             where: { narradorId: { id: usuarioId } }
         });
+        const jugador = await this.partidaRepo.createQueryBuilder('partida')
+            .leftJoinAndSelect('partida.jugadores', 'jugador')
+            .where('jugador.id = :usuarioId', { usuarioId })
+            .getMany();
+        return { dm, jugador };
     }
 
     async getPartidaById(id: number): Promise<PartidaEntity> {

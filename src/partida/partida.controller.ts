@@ -33,6 +33,7 @@ export class PartidaController {
         return this.partidaServ.solicitarUnirse(linkAcceso, usuarioId);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post(':partidaId/solicitud/:usuarioId/aceptar')
     aceptarSolicitud(
         @Param('partidaId', ParseIntPipe) partidaId: number,
@@ -43,6 +44,7 @@ export class PartidaController {
         return this.partidaServ.aceptarSolicitud(partidaId, usuarioId, dmId);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post(':partidaId/solicitudes/:usuarioId/rechazar')
     rechazarSolicitud(
         @Param('partidaId', ParseIntPipe) partidaId: number,
@@ -53,6 +55,7 @@ export class PartidaController {
         return this.partidaServ.rechazarSolicitud(partidaId, usuarioId, dmId);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get()
     findAll(@Req() req) {
         const usuarioId = req.user.id;
@@ -83,7 +86,7 @@ export class PartidaController {
     @UseGuards(JwtAuthGuard)
     @Delete('partidaId/eliminar-partida')
     remove(
-        @Param('id', ParseIntPipe) id: number,
+        @Param('partidaId', ParseIntPipe) id: number,
         @Req() req
     ) {
         const usuarioId = req.user.id
