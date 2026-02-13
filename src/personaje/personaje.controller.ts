@@ -2,10 +2,11 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, U
 import { PersonajeService } from './personaje.service';
 import { CrearPersonajeDto } from './dto/crear-personaje.dto';
 import { UpdatePersonajeDto } from './dto/update-personaje.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('Personaje')
+@ApiBearerAuth()
 @Controller('personaje')
 export class PersonajeController {
     constructor(private readonly personajeServ: PersonajeService) { }

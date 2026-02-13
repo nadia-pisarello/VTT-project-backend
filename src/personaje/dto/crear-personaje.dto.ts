@@ -17,7 +17,7 @@ export class CrearPersonajeDto {
 
     @ApiProperty({
         description: 'Alineamiento del personaje',
-        example: 'LEGAL_BUENO'
+        example: 'Legal Bueno'
     })
     @IsEnum(AlineamientoEnum) @IsNotEmpty()
     alineamiento: AlineamientoEnum;
@@ -27,13 +27,26 @@ export class CrearPersonajeDto {
         type: [HabilidadDto],
         example: [
             {
-                nombre: 'FUE',
+                nombre: 'Fuerza',
                 valor: 18
             },
             {
-                nombre: 'DES',
+                nombre: 'Destreza',
                 valor: 14
-            }
+            },
+            {
+                nombre: 'Constitución',
+                valor: 14
+            }, {
+                nombre: 'Inteligencia',
+                valor: 14
+            }, {
+                nombre: 'Sabiduría',
+                valor: 14
+            }, {
+                nombre: 'Carisma',
+                valor: 14
+            },
         ]
     })
     @IsArray()
@@ -43,14 +56,14 @@ export class CrearPersonajeDto {
 
     @ApiProperty({
         description: 'Clase del personaje',
-        example: 'GUERRERO'
+        example: 'Guerrero'
     })
     @IsEnum(ClaseEnum) @IsNotEmpty()
     clase: ClaseEnum;
 
     @ApiProperty({
         description: 'Raza del personaje',
-        example: 'ELFO'
+        example: 'Elfo'
     })
     @IsString() @IsNotEmpty()
     raza: string;
